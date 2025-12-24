@@ -1153,6 +1153,21 @@
           return;
         }
 
+        // トークン検証（Worker経由でGAS APIを呼び出し）
+        try {
+          const validateResponse = await fetch(`${WORKER_URL}/validate?token=${encodeURIComponent(TOKEN)}`);
+          const validateResult = await validateResponse.json();
+
+          if (!validateResult.valid) {
+            // トークンが無効な場合はエラー画面を表示
+            showError(validateResult.error || 'DEFAULT');
+            return;
+          }
+        } catch (validateError) {
+          console.warn('Token validation failed, continuing with form:', validateError);
+          // 検証に失敗しても、フォームは表示する（送信時に再検証される）
+        }
+
         // 受付データを表示
         document.getElementById('displayName').textContent = receptionData.name + ' 様';
         document.getElementById('displayPhone').textContent = formatPhoneNumber(receptionData.phone);
