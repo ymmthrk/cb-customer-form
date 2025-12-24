@@ -884,9 +884,6 @@
             </label>
           </div>
 
-          <!-- デバッグ情報 -->
-          <div id="debugInfo" style="background: #fff3e0; padding: 8px; margin-bottom: 16px; border-radius: 4px; font-size: 12px; color: #f57c00;"></div>
-
           <!-- 確認ボタン -->
           <button class="button button-primary" id="confirmButton" disabled>
             <span class="material-icons">check_circle</span>
@@ -1574,43 +1571,25 @@
       const consent = document.getElementById('consent').checked;
 
       let isValid = true;
-      let debugInfo = [];
 
       if (!email || !validateEmail(email)) {
         isValid = false;
-        debugInfo.push('email');
       }
 
-      if (!selectedBank) {
+      if (!selectedBank || !selectedBranch) {
         isValid = false;
-        debugInfo.push('bank');
-      }
-
-      if (!selectedBranch) {
-        isValid = false;
-        debugInfo.push('branch');
       }
 
       if (!accountNumber || accountNumber.length !== 7) {
         isValid = false;
-        debugInfo.push('accountNumber(' + accountNumber.length + ')');
       }
 
       if (!accountName || !validateKana(accountName)) {
         isValid = false;
-        debugInfo.push('accountName');
       }
 
       if (!consent) {
         isValid = false;
-        debugInfo.push('consent');
-      }
-
-      // デバッグ表示
-      console.log('Validation:', isValid, debugInfo);
-      const debugEl = document.getElementById('debugInfo');
-      if (debugEl) {
-        debugEl.textContent = isValid ? '✓ OK' : '✗ ' + debugInfo.join(', ');
       }
 
       document.getElementById('confirmButton').disabled = !isValid;
