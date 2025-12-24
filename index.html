@@ -1025,11 +1025,11 @@
         const callbackName = 'jsonp_callback_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
         const script = document.createElement('script');
 
-        // タイムアウト設定
+        // タイムアウト設定（10秒）
         const timeout = setTimeout(() => {
           cleanup();
           reject(new Error('JSONP request timeout'));
-        }, 30000);
+        }, 10000);
 
         function cleanup() {
           clearTimeout(timeout);
@@ -1124,7 +1124,7 @@
         }
 
         // 受付データを表示
-        document.getElementById('displayName').textContent = receptionData.name;
+        document.getElementById('displayName').textContent = receptionData.name + ' 様';
         document.getElementById('displayPhone').textContent = formatPhoneNumber(receptionData.phone);
         document.getElementById('displayAmount').textContent = receptionData.amount.toLocaleString() + '円';
 
@@ -1133,8 +1133,8 @@
           document.getElementById('email').value = receptionData.email;
         }
 
-        // 銀行データを取得
-        await loadBanks();
+        // 銀行データは遅延読み込み（フォーカス時に取得）
+        // await loadBanks(); // 初期ロードでは読み込まない
 
         // localStorageから復元
         restoreFormData();
@@ -1217,7 +1217,13 @@
         }
       });
 
-      bankSearch.addEventListener('focus', function() {
+      bankSearch.addEventListener('focus', async function() {
+        // 銀行データを遅延読み込み
+        if (banksCache.length === 0) {
+          this.placeholder = '銀行データを読み込み中...';
+          await loadBanks();
+          this.placeholder = '銀行名を入力（カナ可）';
+        }
         if (this.value) {
           searchBanks(this.value);
         }
@@ -1334,15 +1340,46 @@
 
     // カナ変換関数
     function convertToKana(text) {
+      // ひらがな → カタカナ
       let result = text.replace(/[ぁ-ん]/g, function(s) {
         return String.fromCharCode(s.charCodeAt(0) + 0x60);
       });
 
+      // 半角カナ → 全角カナ
       result = result.replace(/[ｦ-ﾟ]/g, function(s) {
         return String.fromCharCode(s.charCodeAt(0) + 0xFEC0);
       });
 
       result = result.toUpperCase();
+
+      return result;
+    }
+
+    // 検索用にカナを正規化（全角カナに統一）
+    function normalizeForSearch(text) {
+      // ひらがな → カタカナ
+      let result = text.replace(/[ぁ-ん]/g, function(s) {
+        return String.fromCharCode(s.charCodeAt(0) + 0x60);
+      });
+
+      // 半角カナ → 全角カナ
+      const halfToFull = {
+        'ｦ': 'ヲ', 'ｧ': 'ァ', 'ｨ': 'ィ', 'ｩ': 'ゥ', 'ｪ': 'ェ', 'ｫ': 'ォ',
+        'ｬ': 'ャ', 'ｭ': 'ュ', 'ｮ': 'ョ', 'ｯ': 'ッ', 'ｰ': 'ー',
+        'ｱ': 'ア', 'ｲ': 'イ', 'ｳ': 'ウ', 'ｴ': 'エ', 'ｵ': 'オ',
+        'ｶ': 'カ', 'ｷ': 'キ', 'ｸ': 'ク', 'ｹ': 'ケ', 'ｺ': 'コ',
+        'ｻ': 'サ', 'ｼ': 'シ', 'ｽ': 'ス', 'ｾ': 'セ', 'ｿ': 'ソ',
+        'ﾀ': 'タ', 'ﾁ': 'チ', 'ﾂ': 'ツ', 'ﾃ': 'テ', 'ﾄ': 'ト',
+        'ﾅ': 'ナ', 'ﾆ': 'ニ', 'ﾇ': 'ヌ', 'ﾈ': 'ネ', 'ﾉ': 'ノ',
+        'ﾊ': 'ハ', 'ﾋ': 'ヒ', 'ﾌ': 'フ', 'ﾍ': 'ヘ', 'ﾎ': 'ホ',
+        'ﾏ': 'マ', 'ﾐ': 'ミ', 'ﾑ': 'ム', 'ﾒ': 'メ', 'ﾓ': 'モ',
+        'ﾔ': 'ヤ', 'ﾕ': 'ユ', 'ﾖ': 'ヨ',
+        'ﾗ': 'ラ', 'ﾘ': 'リ', 'ﾙ': 'ル', 'ﾚ': 'レ', 'ﾛ': 'ロ',
+        'ﾜ': 'ワ', 'ﾝ': 'ン', 'ﾞ': '゛', 'ﾟ': '゜'
+      };
+      result = result.replace(/[ｦ-ﾟ]/g, function(s) {
+        return halfToFull[s] || s;
+      });
 
       return result;
     }
@@ -1374,13 +1411,17 @@
         return;
       }
 
-      const normalizedKeyword = normalizeKana(keyword);
+      // 検索キーワードを正規化（全角カナに統一）
+      const normalizedKeyword = normalizeForSearch(keyword);
+      const normalizedKeywordSmall = normalizeKana(normalizedKeyword);
 
-      const filtered = banksCache.filter(bank =>
-        bank.name.includes(keyword) ||
-        bank.kana.includes(keyword) ||
-        normalizeKana(bank.kana).includes(normalizedKeyword)
-      );
+      const filtered = banksCache.filter(bank => {
+        const normalizedBankKana = normalizeForSearch(bank.kana || '');
+        const normalizedBankKanaSmall = normalizeKana(normalizedBankKana);
+        return bank.name.includes(keyword) ||
+          normalizedBankKana.includes(normalizedKeyword) ||
+          normalizedBankKanaSmall.includes(normalizedKeywordSmall);
+      });
 
       if (filtered.length === 0) {
         results.innerHTML = '<div class="no-results">該当する銀行が見つかりません<br><small>カナで入力してください（例：ミズホ）</small></div>';
