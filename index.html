@@ -1007,6 +1007,8 @@
   <script>
     // 設定（静的ホスティング用）
     const GAS_URL = 'https://script.google.com/a/macros/terracom.co.jp/s/AKfycbwl__0N9PAeTRFpXBHYVNVe72vGsTLGdJTaRyeqMHejPiLNbzxGfHTuDy2L8ojSFzpi/exec';
+    // Cloudflare Worker URL
+    const WORKER_URL = 'https://cb-form-proxy.ilucartip.workers.dev';
     const BASE_URL = GAS_URL;
     const TOKEN = new URLSearchParams(window.location.search).get('token') || '';
     const ENCODED_DATA = new URLSearchParams(window.location.search).get('d') || '';
@@ -1720,7 +1722,7 @@
       window.scrollTo(0, 0);
     }
 
-    // フォーム送信（ネイティブフォームPOST）
+    // フォーム送信（Cloudflare Worker経由）
     function submitForm() {
       document.getElementById('confirmationSection').classList.remove('show');
       document.getElementById('loadingSection').classList.add('show');
@@ -1741,7 +1743,33 @@
         external: 'true'
       };
 
-      // fetchで送信を試みる（no-corsモード）
+      // Cloudflare Worker経由で送信
+      const submitData = new FormData();
+      for (const [key, value] of Object.entries(fields)) {
+        submitData.append(key, value);
+      }
+
+      fetch(WORKER_URL + '/submit', {
+        method: 'POST',
+        body: submitData
+      }).then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            showSubmitResult(true, '口座情報の登録が完了しました。<br>このページを閉じてください。');
+          } else {
+            console.error('Submit failed:', data.error);
+            showSubmitResult(false, 'エラーが発生しました。<br>しばらく経ってから再度お試しください。');
+          }
+        })
+        .catch(error => {
+          console.error('Submit error:', error);
+          // フォールバック：直接GASに送信を試みる（no-corsモード）
+          submitDirectToGAS(fields);
+        });
+    }
+
+    // 直接GASに送信（フォールバック）
+    function submitDirectToGAS(fields) {
       const submitData = new FormData();
       for (const [key, value] of Object.entries(fields)) {
         submitData.append(key, value);
@@ -1749,15 +1777,12 @@
 
       fetch(GAS_URL + '?path=external-form', {
         method: 'POST',
-        mode: 'no-cors',  // CORSエラーを回避（レスポンスは取得できない）
+        mode: 'no-cors',
         body: submitData
       }).then(() => {
-        // no-corsモードではレスポンス内容を確認できないが、
-        // エラーが発生しなければ送信成功とみなす
         showSubmitResult(true, '口座情報の登録が完了しました。<br>このページを閉じてください。');
       }).catch(error => {
-        console.error('Submit error:', error);
-        // フォールバック：隠しiframeで送信を試みる
+        console.error('Direct GAS submit error:', error);
         submitViaIframe(fields);
       });
     }
