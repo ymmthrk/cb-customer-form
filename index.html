@@ -796,6 +796,31 @@
               <div class="error-text" id="bankError">銀行を選択してください / Please select a bank</div>
             </div>
 
+            <!-- ゆうちょ銀行アラート -->
+            <div id="yuuchoAlert" style="display: none; background: #fff3e0; border: 2px solid #ff9800; border-radius: 8px; padding: 16px; margin-bottom: 24px;">
+              <div style="display: flex; gap: 12px;">
+                <span class="material-icons" style="color: #f57c00; font-size: 24px;">warning</span>
+                <div style="flex: 1;">
+                  <div style="font-weight: 500; color: #e65100; margin-bottom: 8px;">
+                    ゆうちょ銀行をご利用の方へ<br>
+                    <small style="color: #888;">For Japan Post Bank users</small>
+                  </div>
+                  <div style="font-size: 13px; color: #666; line-height: 1.6; margin-bottom: 12px;">
+                    通帳に記載の「記号・番号」と振込用の「店名・口座番号」は異なります。<br>
+                    <small style="color: #888;">The "Symbol/Number" on your passbook differs from the transfer account number.</small>
+                  </div>
+                  <div style="font-size: 13px; color: #666; margin-bottom: 12px;">
+                    下記リンクで変換してから入力してください：<br>
+                    <small style="color: #888;">Please convert using the link below:</small>
+                  </div>
+                  <a href="https://www.jp-bank.japanpost.jp/kojin/sokin/furikomi/kouza/kj_sk_fm_kz_1.html" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 4px; color: #1976d2; text-decoration: none; font-size: 14px; font-weight: 500;">
+                    <span class="material-icons" style="font-size: 18px;">open_in_new</span>
+                    記号番号から振込用口座番号を調べる
+                  </a>
+                </div>
+              </div>
+            </div>
+
             <!-- 支店名 -->
             <div class="form-field">
               <label class="form-label">
@@ -1476,6 +1501,14 @@
       selectedBank = { code, name, kana };
       document.getElementById('bankSearch').value = name;
       document.getElementById('bankResults').classList.remove('show');
+
+      // ゆうちょ銀行アラートの表示制御
+      const yuuchoAlert = document.getElementById('yuuchoAlert');
+      if (code === '9900') {
+        yuuchoAlert.style.display = 'block';
+      } else {
+        yuuchoAlert.style.display = 'none';
+      }
 
       // 支店検索を有効化
       const branchSearch = document.getElementById('branchSearch');
