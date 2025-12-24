@@ -1113,6 +1113,41 @@
       }
     };
 
+    // トークン検証（JSONP経由）
+    function validateTokenViaJsonp(token) {
+      return new Promise((resolve, reject) => {
+        const callbackName = 'validate_callback_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        const script = document.createElement('script');
+
+        // タイムアウト設定（5秒）
+        const timeout = setTimeout(() => {
+          cleanup();
+          reject(new Error('Token validation timeout'));
+        }, 5000);
+
+        function cleanup() {
+          clearTimeout(timeout);
+          delete window[callbackName];
+          if (script.parentNode) {
+            script.parentNode.removeChild(script);
+          }
+        }
+
+        window[callbackName] = function(data) {
+          cleanup();
+          resolve(data);
+        };
+
+        script.onerror = function() {
+          cleanup();
+          reject(new Error('Token validation failed'));
+        };
+
+        script.src = GAS_URL + '?path=api/validate-token&token=' + encodeURIComponent(token) + '&callback=' + callbackName;
+        document.head.appendChild(script);
+      });
+    }
+
     // Base64デコード関数（UTF-8対応）
     function decodeReceptionData(encoded) {
       try {
@@ -1153,10 +1188,9 @@
           return;
         }
 
-        // トークン検証（Worker経由でGAS APIを呼び出し）
+        // トークン検証（JSONP経由でGAS APIを呼び出し）
         try {
-          const validateResponse = await fetch(`${WORKER_URL}/validate?token=${encodeURIComponent(TOKEN)}`);
-          const validateResult = await validateResponse.json();
+          const validateResult = await validateTokenViaJsonp(TOKEN);
 
           if (!validateResult.valid) {
             // トークンが無効な場合はエラー画面を表示
