@@ -1009,6 +1009,7 @@
     const GAS_URL = 'https://script.google.com/a/macros/terracom.co.jp/s/AKfycbwl__0N9PAeTRFpXBHYVNVe72vGsTLGdJTaRyeqMHejPiLNbzxGfHTuDy2L8ojSFzpi/exec';
     const BASE_URL = GAS_URL;
     const TOKEN = new URLSearchParams(window.location.search).get('token') || '';
+    const ENCODED_DATA = new URLSearchParams(window.location.search).get('d') || '';
 
     // グローバル変数
     let receptionData = null;
@@ -1082,23 +1083,39 @@
       }
     };
 
+    // Base64デコード関数
+    function decodeReceptionData(encoded) {
+      try {
+        const decoded = atob(encoded);
+        const data = JSON.parse(decoded);
+        return {
+          name: data.n,
+          phone: data.p,
+          amount: data.a,
+          storeName: data.s,
+          email: data.e
+        };
+      } catch (e) {
+        console.error('Failed to decode reception data:', e);
+        return null;
+      }
+    }
+
     // 初期化
     document.addEventListener('DOMContentLoaded', async function() {
-      if (!TOKEN) {
+      if (!TOKEN || !ENCODED_DATA) {
         showError('INVALID_TOKEN_FORMAT');
         return;
       }
 
       try {
-        // 受付データを取得（JSONP）
-        const result = await jsonp(BASE_URL + '?path=api/form/' + TOKEN);
+        // URLから受付データをデコード（API呼び出し不要）
+        receptionData = decodeReceptionData(ENCODED_DATA);
 
-        if (!result.success) {
-          showError(result.error || 'DEFAULT');
+        if (!receptionData) {
+          showError('INVALID_TOKEN_FORMAT');
           return;
         }
-
-        receptionData = result.data.reception;
 
         // 受付データを表示
         document.getElementById('displayName').textContent = receptionData.name;
