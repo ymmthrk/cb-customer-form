@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>キャッシュバック口座情報入力フォーム</title>
-  <base target="_top">
 
   <!-- Material UI CSS (CDN) -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -686,8 +685,8 @@
   <div class="container">
     <!-- ヘッダー -->
     <div class="header">
-      <h1>キャッシュバック口座情報入力</h1>
-      <p>振込先の口座情報をご入力ください</p>
+      <h1>キャッシュバック口座情報入力<br><small style="font-size: 14px; font-weight: 400;">Cashback Bank Account Registration</small></h1>
+      <p>振込先の口座情報をご入力ください<br><small style="opacity: 0.8;">Please enter your bank account information</small></p>
     </div>
 
     <!-- メインコンテンツ -->
@@ -695,7 +694,7 @@
       <!-- 初期ローディング -->
       <div class="loading show" id="initialLoading">
         <div class="spinner"></div>
-        <p style="color: #666;">読み込み中...</p>
+        <p style="color: #666;">読み込み中... / Loading...</p>
       </div>
 
       <!-- エラー画面 -->
@@ -703,7 +702,7 @@
         <div class="error-icon">
           <span class="material-icons">error_outline</span>
         </div>
-        <h2 class="error-title" id="errorTitle">エラー</h2>
+        <h2 class="error-title" id="errorTitle">エラー / Error</h2>
         <p class="error-message" id="errorMessage">問題が発生しました。</p>
       </div>
 
@@ -713,15 +712,15 @@
         <div class="steps">
           <div class="step active" id="step1">
             <div class="step-circle">1</div>
-            <div class="step-label">情報入力</div>
+            <div class="step-label">情報入力<br><small style="font-size: 10px;">Input</small></div>
           </div>
           <div class="step" id="step2">
             <div class="step-circle">2</div>
-            <div class="step-label">確認</div>
+            <div class="step-label">確認<br><small style="font-size: 10px;">Confirm</small></div>
           </div>
           <div class="step" id="step3">
             <div class="step-circle">3</div>
-            <div class="step-label">完了</div>
+            <div class="step-label">完了<br><small style="font-size: 10px;">Done</small></div>
           </div>
         </div>
 
@@ -731,19 +730,19 @@
           <div class="section">
             <div class="section-title">
               <span class="material-icons">info</span>
-              ご確認ください
+              ご確認ください / Please Confirm
             </div>
             <div class="info-card">
               <div class="info-row">
-                <span class="info-label">お名前</span>
+                <span class="info-label">お名前 / Name</span>
                 <span class="info-value" id="displayName">-</span>
               </div>
               <div class="info-row">
-                <span class="info-label">電話番号</span>
+                <span class="info-label">電話番号 / Phone</span>
                 <span class="info-value" id="displayPhone">-</span>
               </div>
               <div class="info-row">
-                <span class="info-label">キャッシュバック金額</span>
+                <span class="info-label">キャッシュバック金額 / Amount</span>
                 <span class="info-value" id="displayAmount">-</span>
               </div>
             </div>
@@ -753,7 +752,7 @@
           <div class="section">
             <div class="form-field">
               <label class="form-label">
-                メールアドレス
+                メールアドレス / Email Address
                 <span class="required">*</span>
               </label>
               <input
@@ -763,8 +762,8 @@
                 placeholder="example@email.com"
                 autocomplete="email"
               >
-              <div class="help-text">振込完了通知やエラー発生時の連絡に使用します</div>
-              <div class="error-text" id="emailError">正しいメールアドレスを入力してください</div>
+              <div class="help-text">振込完了通知やエラー発生時の連絡に使用します<br><small style="color: #888;">Used for transfer completion notifications and error alerts</small></div>
+              <div class="error-text" id="emailError">正しいメールアドレスを入力してください / Please enter a valid email address</div>
             </div>
           </div>
 
@@ -772,13 +771,13 @@
           <div class="section">
             <div class="section-title">
               <span class="material-icons">account_balance</span>
-              振込先口座情報
+              振込先口座情報 / Bank Account Information
             </div>
 
             <!-- 銀行名 -->
             <div class="form-field">
               <label class="form-label">
-                銀行名（カナ入力）
+                銀行名 / Bank Name（カナ入力）
                 <span class="required">*</span>
               </label>
               <div class="search-select">
@@ -793,14 +792,39 @@
                 <span class="material-icons search-icon">search</span>
                 <div class="search-results" id="bankResults"></div>
               </div>
-              <div class="help-text">カナで入力すると候補が表示されます（自動的にカナに変換されます）</div>
-              <div class="error-text" id="bankError">銀行を選択してください</div>
+              <div class="help-text">カナで入力すると候補が表示されます<br><small style="color: #888;">Type in Katakana to see suggestions</small></div>
+              <div class="error-text" id="bankError">銀行を選択してください / Please select a bank</div>
+            </div>
+
+            <!-- ゆうちょ銀行アラート -->
+            <div id="yuuchoAlert" style="display: none; background: #fff3e0; border: 2px solid #ff9800; border-radius: 8px; padding: 16px; margin-bottom: 24px;">
+              <div style="display: flex; gap: 12px;">
+                <span class="material-icons" style="color: #f57c00; font-size: 24px;">warning</span>
+                <div style="flex: 1;">
+                  <div style="font-weight: 500; color: #e65100; margin-bottom: 8px;">
+                    ゆうちょ銀行をご利用の方へ<br>
+                    <small style="color: #888;">For Japan Post Bank users</small>
+                  </div>
+                  <div style="font-size: 13px; color: #666; line-height: 1.6; margin-bottom: 12px;">
+                    通帳に記載の「記号・番号」と振込用の「店名・口座番号」は異なります。<br>
+                    <small style="color: #888;">The "Symbol/Number" on your passbook differs from the transfer account number.</small>
+                  </div>
+                  <div style="font-size: 13px; color: #666; margin-bottom: 12px;">
+                    下記リンクで変換してから入力してください：<br>
+                    <small style="color: #888;">Please convert using the link below:</small>
+                  </div>
+                  <a href="https://www.jp-bank.japanpost.jp/kojin/sokin/furikomi/kouza/kj_sk_fm_kz_1.html" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 4px; color: #1976d2; text-decoration: none; font-size: 14px; font-weight: 500;">
+                    <span class="material-icons" style="font-size: 18px;">open_in_new</span>
+                    記号番号から振込用口座番号を調べる
+                  </a>
+                </div>
+              </div>
             </div>
 
             <!-- 支店名 -->
             <div class="form-field">
               <label class="form-label">
-                支店名（カナ入力）
+                支店名 / Branch Name（カナ入力）
                 <span class="required">*</span>
               </label>
               <div class="search-select">
@@ -816,24 +840,24 @@
                 <span class="material-icons search-icon">search</span>
                 <div class="search-results" id="branchResults"></div>
               </div>
-              <div class="help-text" id="branchHelp">まず銀行を選択してください</div>
-              <div class="error-text" id="branchError">支店を選択してください</div>
+              <div class="help-text" id="branchHelp">まず銀行を選択してください / Please select a bank first</div>
+              <div class="error-text" id="branchError">支店を選択してください / Please select a branch</div>
             </div>
 
             <!-- 預金種目 -->
             <div class="form-field">
               <label class="form-label">
-                預金種目
+                預金種目 / Account Type
                 <span class="required">*</span>
               </label>
               <div class="radio-group">
                 <div class="radio-option">
                   <input type="radio" name="accountType" id="typeOrdinary" value="ordinary" checked>
-                  <label for="typeOrdinary" class="radio-label">普通預金</label>
+                  <label for="typeOrdinary" class="radio-label">普通預金<br><small style="font-size: 11px;">Savings</small></label>
                 </div>
                 <div class="radio-option">
                   <input type="radio" name="accountType" id="typeCurrent" value="current">
-                  <label for="typeCurrent" class="radio-label">当座預金</label>
+                  <label for="typeCurrent" class="radio-label">当座預金<br><small style="font-size: 11px;">Checking</small></label>
                 </div>
               </div>
             </div>
@@ -841,7 +865,7 @@
             <!-- 口座番号 -->
             <div class="form-field">
               <label class="form-label">
-                口座番号
+                口座番号 / Account Number
                 <span class="required">*</span>
               </label>
               <input
@@ -853,14 +877,14 @@
                 inputmode="numeric"
                 autocomplete="off"
               >
-              <div class="help-text">7桁の数字を入力してください（自動的にゼロ埋めされます）</div>
-              <div class="error-text" id="accountNumberError">7桁の数字を入力してください</div>
+              <div class="help-text">7桁の数字を入力してください<br><small style="color: #888;">Enter 7 digits (auto-padded with zeros)</small></div>
+              <div class="error-text" id="accountNumberError">7桁の数字を入力してください / Please enter 7 digits</div>
             </div>
 
             <!-- 口座名義 -->
             <div class="form-field">
               <label class="form-label">
-                口座名義（カナ）
+                口座名義 / Account Holder Name（カナ）
                 <span class="required">*</span>
               </label>
               <input
@@ -871,8 +895,8 @@
                 autocomplete="off"
                 inputmode="katakana"
               >
-              <div class="help-text">全角カタカナで入力してください。姓と名の間にスペースを入れてください（例：ヤマダ タロウ）<br>※半角スペースも自動的に全角スペースに変換されます</div>
-              <div class="error-text" id="accountNameError">全角カタカナで入力してください</div>
+              <div class="help-text">全角カタカナで入力してください。姓と名の間にスペースを入れてください（例：ヤマダ タロウ）<br><small style="color: #888;">Enter in Katakana with a space between family and given name</small></div>
+              <div class="error-text" id="accountNameError">全角カタカナで入力してください / Please enter in Katakana</div>
             </div>
           </div>
 
@@ -880,7 +904,8 @@
           <div class="checkbox-field">
             <input type="checkbox" id="consent">
             <label for="consent" class="checkbox-label">
-              <a href="#" target="_blank">個人情報の取扱いに関する同意事項</a>を確認し、同意します
+              <a href="#" target="_blank">個人情報の取扱いに関する同意事項</a>を確認し、同意します<br>
+              <small style="color: #666;">I have read and agree to the privacy policy</small>
             </label>
           </div>
 
@@ -888,14 +913,15 @@
           <div class="checkbox-field">
             <input type="checkbox" id="accountNameConfirm">
             <label for="accountNameConfirm" class="checkbox-label">
-              口座名義が店頭契約者本人または一親等以内の親族であることを確認しました
+              口座名義が店頭契約者本人または一親等以内の親族であることを確認しました<br>
+              <small style="color: #666;">I confirm the account holder is the customer or a first-degree relative</small>
             </label>
           </div>
 
           <!-- 確認ボタン -->
           <button class="button button-primary" id="confirmButton" disabled>
             <span class="material-icons">check_circle</span>
-            確認画面へ
+            確認画面へ / Confirm
           </button>
         </div>
 
@@ -904,10 +930,11 @@
           <div class="section">
             <div class="section-title">
               <span class="material-icons">fact_check</span>
-              入力内容の確認
+              入力内容の確認 / Confirmation
             </div>
             <p style="color: #666; font-size: 14px; margin-bottom: 24px;">
-              以下の内容でよろしければ「送信する」ボタンを押してください
+              以下の内容でよろしければ「送信する」ボタンを押してください<br>
+              <small style="color: #888;">Please review and click "Submit" if correct</small>
             </p>
 
             <!-- 警告バナー（スペースなし口座名義） -->
@@ -915,17 +942,18 @@
               <div class="warning-banner">
                 <span class="material-icons">warning</span>
                 <div class="warning-content">
-                  <div class="warning-title">確認してください</div>
+                  <div class="warning-title">確認してください / Please Check</div>
                   <div class="warning-text">
                     口座名義にスペースが含まれていません。<br>
-                    正式な口座名義は、姓と名の間にスペースを入れる必要があります。
+                    正式な口座名義は、姓と名の間にスペースを入れる必要があります。<br>
+                    <small style="color: #888;">Account name has no space. Usually a space is required between family and given name.</small>
                   </div>
                   <div class="warning-example">
                     例：ヤマダ タロウ、タナカ ハナコ、サトウ ケンイチ
                   </div>
                   <div style="font-size: 12px; color: #999; margin-top: 8px;">
                     修正する場合は「戻る」ボタンを押してください。<br>
-                    スペースが不要な場合は、そのまま送信できます。
+                    <small>Click "Back" to edit, or submit as is if no space is needed.</small>
                   </div>
                 </div>
               </div>
@@ -933,43 +961,43 @@
 
             <div class="info-card">
               <div class="confirm-item">
-                <div class="confirm-label">お名前</div>
+                <div class="confirm-label">お名前 / Name</div>
                 <div class="confirm-value" id="confirmName"></div>
               </div>
               <div class="confirm-item">
-                <div class="confirm-label">電話番号</div>
+                <div class="confirm-label">電話番号 / Phone</div>
                 <div class="confirm-value" id="confirmPhone"></div>
               </div>
               <div class="confirm-item">
-                <div class="confirm-label">メールアドレス</div>
+                <div class="confirm-label">メールアドレス / Email</div>
                 <div class="confirm-value" id="confirmEmail"></div>
               </div>
               <div class="confirm-item">
-                <div class="confirm-label">キャッシュバック金額</div>
+                <div class="confirm-label">キャッシュバック金額 / Amount</div>
                 <div class="confirm-value" id="confirmAmount"></div>
               </div>
               <div class="confirm-item">
-                <div class="confirm-label">銀行名</div>
+                <div class="confirm-label">銀行名 / Bank</div>
                 <div class="confirm-value" id="confirmBank"></div>
               </div>
               <div class="confirm-item">
-                <div class="confirm-label">支店名</div>
+                <div class="confirm-label">支店名 / Branch</div>
                 <div class="confirm-value" id="confirmBranch"></div>
               </div>
               <div class="confirm-item">
-                <div class="confirm-label">預金種目</div>
+                <div class="confirm-label">預金種目 / Account Type</div>
                 <div class="confirm-value" id="confirmAccountType"></div>
               </div>
               <div class="confirm-item">
-                <div class="confirm-label">口座番号</div>
+                <div class="confirm-label">口座番号 / Account No.</div>
                 <div class="confirm-value" id="confirmAccountNumber"></div>
               </div>
               <div class="confirm-item">
-                <div class="confirm-label">口座名義</div>
+                <div class="confirm-label">口座名義 / Account Holder</div>
                 <div class="confirm-value" id="confirmAccountName"></div>
               </div>
               <div class="confirm-item">
-                <div class="confirm-label">口座名義確認</div>
+                <div class="confirm-label">口座名義確認 / Account Holder Confirmation</div>
                 <div class="confirm-value" style="color: #4caf50;">
                   <span class="material-icons" style="font-size: 16px; vertical-align: middle;">check_circle</span>
                   店頭契約者本人または一親等以内の親族であることを確認済み
@@ -980,11 +1008,11 @@
             <div class="button-group">
               <button class="button button-secondary" id="backButton">
                 <span class="material-icons">arrow_back</span>
-                戻る
+                戻る / Back
               </button>
               <button class="button button-primary" id="submitButton">
                 <span class="material-icons">send</span>
-                送信する
+                送信する / Submit
               </button>
             </div>
           </div>
@@ -993,7 +1021,7 @@
         <!-- 送信中 -->
         <div class="loading" id="loadingSection">
           <div class="spinner"></div>
-          <p style="color: #666;">送信中...</p>
+          <p style="color: #666;">送信中... / Submitting...</p>
         </div>
 
         <!-- 完了画面 -->
@@ -1001,13 +1029,13 @@
           <div class="success-icon">
             <span class="material-icons">check</span>
           </div>
-          <h2 class="completion-title">送信完了</h2>
+          <h2 class="completion-title">送信完了 / Submitted</h2>
           <p class="completion-message">
             口座情報の登録が完了しました。<br>
             振込完了後、ご登録いただいたメールアドレスに通知をお送りします。<br>
             <br>
-            振込までにお時間をいただく場合がございます。<br>
-            ご不明な点がございましたら、店舗までお問い合わせください。
+            <small style="color: #888;">Your bank account information has been registered.<br>
+            You will receive an email notification when the transfer is complete.</small>
           </p>
         </div>
       </div>
@@ -1017,13 +1045,17 @@
   <!-- 自動保存インジケーター -->
   <div class="autosave-indicator" id="autosaveIndicator">
     <span class="material-icons" style="font-size: 16px;">cloud_done</span>
-    <span>自動保存しました</span>
+    <span>自動保存しました / Auto-saved</span>
   </div>
 
   <script>
-    // 設定
-    const BASE_URL = 'https://script.google.com/a/macros/terracom.co.jp/s/AKfycbwl__0N9PAeTRFpXBHYVNVe72vGsTLGdJTaRyeqMHejPiLNbzxGfHTuDy2L8ojSFzpi/exec';
+    // 設定（静的ホスティング用）
+    const GAS_URL = 'https://script.google.com/a/macros/terracom.co.jp/s/AKfycbwl__0N9PAeTRFpXBHYVNVe72vGsTLGdJTaRyeqMHejPiLNbzxGfHTuDy2L8ojSFzpi/exec';
+    // Cloudflare Worker URL
+    const WORKER_URL = 'https://cb-form-proxy.ilucartip.workers.dev';
+    const BASE_URL = GAS_URL;
     const TOKEN = new URLSearchParams(window.location.search).get('token') || '';
+    const ENCODED_DATA = new URLSearchParams(window.location.search).get('d') || '';
 
     // グローバル変数
     let receptionData = null;
@@ -1033,55 +1065,127 @@
     let selectedBranch = null;
     let formData = {};
 
+    // JSONP リクエスト関数（CORS回避用）
+    function jsonp(url) {
+      return new Promise((resolve, reject) => {
+        const callbackName = 'jsonp_callback_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        const script = document.createElement('script');
+
+        // タイムアウト設定（10秒）
+        const timeout = setTimeout(() => {
+          cleanup();
+          reject(new Error('JSONP request timeout'));
+        }, 10000);
+
+        function cleanup() {
+          clearTimeout(timeout);
+          delete window[callbackName];
+          if (script.parentNode) {
+            script.parentNode.removeChild(script);
+          }
+        }
+
+        window[callbackName] = function(data) {
+          cleanup();
+          resolve(data);
+        };
+
+        script.onerror = function() {
+          cleanup();
+          reject(new Error('JSONP request failed'));
+        };
+
+        const separator = url.includes('?') ? '&' : '?';
+        script.src = url + separator + 'callback=' + callbackName;
+        document.head.appendChild(script);
+      });
+    }
+
     // エラーメッセージ定義
     const ERROR_MESSAGES = {
       'INVALID_TOKEN_FORMAT': {
-        title: '無効なURL',
-        message: 'このURLは正しくありません。<br>QRコードを再度スキャンしてください。'
+        title: '無効なURL / Invalid URL',
+        message: 'このURLは正しくありません。<br>QRコードを再度スキャンしてください。<br><small style="color: #888;">This URL is invalid. Please scan the QR code again.</small>'
       },
       'TOKEN_NOT_FOUND': {
-        title: '受付情報が見つかりません',
-        message: 'この受付は見つかりません。<br>店舗スタッフにお問い合わせください。'
+        title: '受付情報が見つかりません / Not Found',
+        message: 'この受付は見つかりません。<br>店舗スタッフにお問い合わせください。<br><small style="color: #888;">This registration was not found. Please contact staff.</small>'
       },
       'TOKEN_INVALIDATED': {
-        title: 'このQRコードは無効です',
-        message: 'このQRコードは再発行されたため無効になりました。<br>新しいQRコードをご利用ください。'
+        title: 'このQRコードは無効です / Invalid QR Code',
+        message: 'このQRコードは再発行されたため無効になりました。<br>新しいQRコードをご利用ください。<br><small style="color: #888;">This QR code has been reissued. Please use the new one.</small>'
       },
       'TOKEN_ALREADY_USED': {
-        title: '登録済み',
-        message: '口座情報は既に登録されています。<br>ご不明な点は店舗スタッフにお問い合わせください。'
+        title: '登録済み / Already Registered',
+        message: '口座情報は既に登録されています。<br>ご不明な点は店舗スタッフにお問い合わせください。<br><small style="color: #888;">Bank account is already registered. Please contact staff if you have questions.</small>'
       },
       'TOKEN_EXPIRED': {
-        title: '有効期限切れ',
-        message: 'このQRコードの有効期限が切れています。<br>店舗にてQRコードを再発行してもらってください。'
+        title: '有効期限切れ / Expired',
+        message: 'このQRコードの有効期限が切れています。<br>店舗にてQRコードを再発行してもらってください。<br><small style="color: #888;">This QR code has expired. Please ask staff to reissue it.</small>'
       },
       'DEFAULT': {
-        title: 'エラー',
-        message: '問題が発生しました。<br>しばらく経ってから再度お試しください。'
+        title: 'エラー / Error',
+        message: '問題が発生しました。<br>しばらく経ってから再度お試しください。<br><small style="color: #888;">An error occurred. Please try again later.</small>'
       }
     };
 
+    // Base64デコード関数（UTF-8対応）
+    function decodeReceptionData(encoded) {
+      try {
+        // Base64 → バイナリ文字列 → UTF-8デコード
+        const binaryString = atob(encoded);
+        const bytes = new Uint8Array(binaryString.length);
+        for (let i = 0; i < binaryString.length; i++) {
+          bytes[i] = binaryString.charCodeAt(i);
+        }
+        const decoded = new TextDecoder('utf-8').decode(bytes);
+        const data = JSON.parse(decoded);
+        return {
+          name: data.n,
+          phone: data.p,
+          amount: data.a,
+          storeName: data.s,
+          email: data.e
+        };
+      } catch (e) {
+        console.error('Failed to decode reception data:', e);
+        return null;
+      }
+    }
+
     // 初期化
     document.addEventListener('DOMContentLoaded', async function() {
-      if (!TOKEN) {
+      if (!TOKEN || !ENCODED_DATA) {
         showError('INVALID_TOKEN_FORMAT');
         return;
       }
 
       try {
-        // 受付データを取得
-        const response = await fetch(BASE_URL + '?path=api/form/' + TOKEN);
-        const result = await response.json();
+        // URLから受付データをデコード（API呼び出し不要）
+        receptionData = decodeReceptionData(ENCODED_DATA);
 
-        if (!result.success) {
-          showError(result.error || 'DEFAULT');
+        if (!receptionData) {
+          showError('INVALID_TOKEN_FORMAT');
           return;
         }
 
-        receptionData = result.data.reception;
+        // トークン状態確認（Worker KV経由）
+        try {
+          const checkResponse = await fetch(`${WORKER_URL}/check-token?token=${encodeURIComponent(TOKEN)}`);
+          const checkResult = await checkResponse.json();
+
+          if (!checkResult.valid) {
+            // トークンが使用済みの場合はエラー画面を表示
+            showError(checkResult.error || 'TOKEN_ALREADY_USED');
+            return;
+          }
+        } catch (checkError) {
+          console.warn('Token check failed, continuing with form:', checkError);
+          // 確認に失敗しても、フォームは表示する（送信時に再検証される）
+        }
 
         // 受付データを表示
-        document.getElementById('displayName').textContent = receptionData.name;
+        document.getElementById('displayName').textContent = receptionData.name + ' 様';
         document.getElementById('displayPhone').textContent = formatPhoneNumber(receptionData.phone);
         document.getElementById('displayAmount').textContent = receptionData.amount.toLocaleString() + '円';
 
@@ -1090,8 +1194,8 @@
           document.getElementById('email').value = receptionData.email;
         }
 
-        // 銀行データを取得
-        await loadBanks();
+        // 銀行データは遅延読み込み（フォーカス時に取得）
+        // await loadBanks(); // 初期ロードでは読み込まない
 
         // localStorageから復元
         restoreFormData();
@@ -1121,34 +1225,46 @@
       document.getElementById('errorSection').classList.add('show');
     }
 
-    // 銀行データを取得
+    // 銀行データを取得（zengin-codeから直接取得）
     async function loadBanks() {
       try {
-        const response = await fetch(BASE_URL + '?path=api/banks');
-        const result = await response.json();
-        if (result.success) {
-          banksCache = result.data.banks || [];
-        }
+        const response = await fetch('https://raw.githubusercontent.com/zengin-code/source-data/master/data/banks.json');
+        const data = await response.json();
+        // オブジェクト形式から配列形式に変換
+        banksCache = Object.values(data).map(bank => ({
+          code: bank.code,
+          name: bank.name,
+          kana: bank.kana
+        }));
       } catch (error) {
         console.error('Failed to load banks:', error);
+        banksCache = [];
       }
     }
 
-    // 支店データを取得
+    // 支店データを取得（zengin-codeから直接取得）
     async function loadBranches(bankCode) {
       if (branchesCache[bankCode]) {
         return branchesCache[bankCode];
       }
 
       try {
-        const response = await fetch(BASE_URL + '?path=api/banks/' + bankCode + '/branches');
-        const result = await response.json();
-        if (result.success) {
-          branchesCache[bankCode] = result.data.branches || [];
-          return branchesCache[bankCode];
+        const response = await fetch(`https://raw.githubusercontent.com/zengin-code/source-data/master/data/branches/${bankCode}.json`);
+        if (!response.ok) {
+          branchesCache[bankCode] = [];
+          return [];
         }
+        const data = await response.json();
+        // オブジェクト形式から配列形式に変換
+        branchesCache[bankCode] = Object.values(data).map(branch => ({
+          code: branch.code,
+          name: branch.name,
+          kana: branch.kana
+        }));
+        return branchesCache[bankCode];
       } catch (error) {
         console.error('Failed to load branches:', error);
+        branchesCache[bankCode] = [];
       }
       return [];
     }
@@ -1176,7 +1292,13 @@
         }
       });
 
-      bankSearch.addEventListener('focus', function() {
+      bankSearch.addEventListener('focus', async function() {
+        // 銀行データを遅延読み込み
+        if (banksCache.length === 0) {
+          this.placeholder = '銀行データを読み込み中...';
+          await loadBanks();
+          this.placeholder = '銀行名を入力（カナ可）';
+        }
         if (this.value) {
           searchBanks(this.value);
         }
@@ -1294,15 +1416,46 @@
 
     // カナ変換関数
     function convertToKana(text) {
+      // ひらがな → カタカナ
       let result = text.replace(/[ぁ-ん]/g, function(s) {
         return String.fromCharCode(s.charCodeAt(0) + 0x60);
       });
 
+      // 半角カナ → 全角カナ
       result = result.replace(/[ｦ-ﾟ]/g, function(s) {
         return String.fromCharCode(s.charCodeAt(0) + 0xFEC0);
       });
 
       result = result.toUpperCase();
+
+      return result;
+    }
+
+    // 検索用にカナを正規化（全角カナに統一）
+    function normalizeForSearch(text) {
+      // ひらがな → カタカナ
+      let result = text.replace(/[ぁ-ん]/g, function(s) {
+        return String.fromCharCode(s.charCodeAt(0) + 0x60);
+      });
+
+      // 半角カナ → 全角カナ
+      const halfToFull = {
+        'ｦ': 'ヲ', 'ｧ': 'ァ', 'ｨ': 'ィ', 'ｩ': 'ゥ', 'ｪ': 'ェ', 'ｫ': 'ォ',
+        'ｬ': 'ャ', 'ｭ': 'ュ', 'ｮ': 'ョ', 'ｯ': 'ッ', 'ｰ': 'ー',
+        'ｱ': 'ア', 'ｲ': 'イ', 'ｳ': 'ウ', 'ｴ': 'エ', 'ｵ': 'オ',
+        'ｶ': 'カ', 'ｷ': 'キ', 'ｸ': 'ク', 'ｹ': 'ケ', 'ｺ': 'コ',
+        'ｻ': 'サ', 'ｼ': 'シ', 'ｽ': 'ス', 'ｾ': 'セ', 'ｿ': 'ソ',
+        'ﾀ': 'タ', 'ﾁ': 'チ', 'ﾂ': 'ツ', 'ﾃ': 'テ', 'ﾄ': 'ト',
+        'ﾅ': 'ナ', 'ﾆ': 'ニ', 'ﾇ': 'ヌ', 'ﾈ': 'ネ', 'ﾉ': 'ノ',
+        'ﾊ': 'ハ', 'ﾋ': 'ヒ', 'ﾌ': 'フ', 'ﾍ': 'ヘ', 'ﾎ': 'ホ',
+        'ﾏ': 'マ', 'ﾐ': 'ミ', 'ﾑ': 'ム', 'ﾒ': 'メ', 'ﾓ': 'モ',
+        'ﾔ': 'ヤ', 'ﾕ': 'ユ', 'ﾖ': 'ヨ',
+        'ﾗ': 'ラ', 'ﾘ': 'リ', 'ﾙ': 'ル', 'ﾚ': 'レ', 'ﾛ': 'ロ',
+        'ﾜ': 'ワ', 'ﾝ': 'ン', 'ﾞ': '゛', 'ﾟ': '゜'
+      };
+      result = result.replace(/[ｦ-ﾟ]/g, function(s) {
+        return halfToFull[s] || s;
+      });
 
       return result;
     }
@@ -1334,16 +1487,21 @@
         return;
       }
 
-      const normalizedKeyword = normalizeKana(keyword);
+      // 検索キーワードを正規化（全角カナに統一）
+      const normalizedKeyword = normalizeForSearch(keyword);
+      const normalizedKeywordSmall = normalizeKana(normalizedKeyword);
 
-      const filtered = banksCache.filter(bank =>
-        bank.name.includes(keyword) ||
-        bank.kana.includes(keyword) ||
-        normalizeKana(bank.kana).includes(normalizedKeyword)
-      );
+      const filtered = banksCache.filter(bank => {
+        const normalizedBankKana = normalizeForSearch(bank.kana || '');
+        const normalizedBankKanaSmall = normalizeKana(normalizedBankKana);
+        // 前方一致検索
+        return bank.name.startsWith(keyword) ||
+          normalizedBankKana.startsWith(normalizedKeyword) ||
+          normalizedBankKanaSmall.startsWith(normalizedKeywordSmall);
+      });
 
       if (filtered.length === 0) {
-        results.innerHTML = '<div class="no-results">該当する銀行が見つかりません<br><small>カナで入力してください（例：ミズホ）</small></div>';
+        results.innerHTML = '<div class="no-results">該当する銀行が見つかりません<br><small>カナで入力してください（例：ミズホ）</small><br><small style="color: #888;">No results. Type in Katakana.</small></div>';
         results.classList.add('show');
         return;
       }
@@ -1376,12 +1534,20 @@
       document.getElementById('bankSearch').value = name;
       document.getElementById('bankResults').classList.remove('show');
 
+      // ゆうちょ銀行アラートの表示制御
+      const yuuchoAlert = document.getElementById('yuuchoAlert');
+      if (code === '9900') {
+        yuuchoAlert.style.display = 'block';
+      } else {
+        yuuchoAlert.style.display = 'none';
+      }
+
       // 支店検索を有効化
       const branchSearch = document.getElementById('branchSearch');
       branchSearch.disabled = false;
       branchSearch.placeholder = '支店名を入力して検索';
       branchSearch.value = '';
-      document.getElementById('branchHelp').textContent = 'カナで入力すると候補が表示されます';
+      document.getElementById('branchHelp').innerHTML = 'カナで入力すると候補が表示されます<br><small style="color: #888;">Type in Katakana to see suggestions</small>';
       selectedBranch = null;
 
       // 支店データをプリロード
@@ -1408,14 +1574,17 @@
       const branches = await loadBranches(selectedBank.code);
       const normalizedKeyword = normalizeKana(keyword);
 
-      const filtered = branches.filter(branch =>
-        branch.name.includes(keyword) ||
-        branch.kana.includes(keyword) ||
-        normalizeKana(branch.kana).includes(normalizedKeyword)
-      );
+      // 前方一致検索
+      const normalizedKeywordFull = normalizeForSearch(keyword);
+      const filtered = branches.filter(branch => {
+        const normalizedBranchKana = normalizeForSearch(branch.kana || '');
+        return branch.name.startsWith(keyword) ||
+          normalizedBranchKana.startsWith(normalizedKeywordFull) ||
+          normalizeKana(normalizedBranchKana).startsWith(normalizedKeyword);
+      });
 
       if (filtered.length === 0) {
-        results.innerHTML = '<div class="no-results">該当する支店が見つかりません<br><small>カナで入力してください（例：トウキヨウ）</small></div>';
+        results.innerHTML = '<div class="no-results">該当する支店が見つかりません<br><small>カナで入力してください（例：トウキヨウ）</small><br><small style="color: #888;">No results. Type in Katakana.</small></div>';
         results.classList.add('show');
         return;
       }
@@ -1626,62 +1795,130 @@
       window.scrollTo(0, 0);
     }
 
-    // フォーム送信
-    async function submitForm() {
+    // フォーム送信（Cloudflare Worker経由）
+    function submitForm() {
       document.getElementById('confirmationSection').classList.remove('show');
       document.getElementById('loadingSection').classList.add('show');
 
-      try {
-        const response = await fetch(BASE_URL + '?path=api/transfers', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            token: TOKEN,
-            email: formData.email,
-            bankCode: formData.bank.code,
-            bankName: formData.bank.name,
-            branchCode: formData.branch.code,
-            branchName: formData.branch.name,
-            accountType: formData.accountType,
-            accountNumber: formData.accountNumber,
-            accountName: formData.accountName,
-          }),
-        });
+      // localStorageクリア
+      localStorage.removeItem('customerFormData_' + TOKEN);
 
-        const result = await response.json();
+      const fields = {
+        token: TOKEN,
+        email: formData.email,
+        bankCode: formData.bank.code,
+        bankName: formData.bank.name,
+        branchCode: formData.branch.code,
+        branchName: formData.branch.name,
+        accountType: formData.accountType === 'ordinary' ? '普通' : '当座',
+        accountNumber: formData.accountNumber,
+        accountName: formData.accountName,
+        external: 'true'
+      };
 
-        document.getElementById('loadingSection').classList.remove('show');
-
-        if (!result.success) {
-          // エラー表示
-          document.getElementById('errorTitle').textContent = 'エラー';
-          document.getElementById('errorMessage').innerHTML = result.error || '送信に失敗しました。';
-          document.getElementById('errorSection').classList.add('show');
-          return;
-        }
-
-        // 完了画面表示
-        document.getElementById('completionSection').classList.add('show');
-
-        document.getElementById('step2').classList.remove('active');
-        document.getElementById('step2').classList.add('completed');
-        document.getElementById('step3').classList.add('active');
-        document.getElementById('step3').classList.add('completed');
-
-        // localStorageクリア
-        localStorage.removeItem('customerFormData_' + TOKEN);
-
-        window.scrollTo(0, 0);
-
-      } catch (error) {
-        console.error('Submit error:', error);
-        document.getElementById('loadingSection').classList.remove('show');
-        document.getElementById('errorTitle').textContent = 'エラー';
-        document.getElementById('errorMessage').innerHTML = '通信エラーが発生しました。<br>しばらく経ってから再度お試しください。';
-        document.getElementById('errorSection').classList.add('show');
+      // Cloudflare Worker経由で送信
+      const submitData = new FormData();
+      for (const [key, value] of Object.entries(fields)) {
+        submitData.append(key, value);
       }
+
+      fetch(WORKER_URL + '/submit', {
+        method: 'POST',
+        body: submitData
+      }).then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            showSubmitResult(true, '口座情報の登録が完了しました。<br>このページを閉じてください。<br><small style="color: #888;">Registration complete. You may close this page.</small>');
+          } else {
+            console.error('Submit failed:', data.error);
+            showSubmitResult(false, 'エラーが発生しました。<br>しばらく経ってから再度お試しください。<br><small style="color: #888;">An error occurred. Please try again later.</small>');
+          }
+        })
+        .catch(error => {
+          console.error('Submit error:', error);
+          // フォールバック：直接GASに送信を試みる（no-corsモード）
+          submitDirectToGAS(fields);
+        });
+    }
+
+    // 直接GASに送信（フォールバック）
+    function submitDirectToGAS(fields) {
+      const submitData = new FormData();
+      for (const [key, value] of Object.entries(fields)) {
+        submitData.append(key, value);
+      }
+
+      fetch(GAS_URL + '?path=external-form', {
+        method: 'POST',
+        mode: 'no-cors',
+        body: submitData
+      }).then(() => {
+        showSubmitResult(true, '口座情報の登録が完了しました。<br>このページを閉じてください。<br><small style="color: #888;">Registration complete. You may close this page.</small>');
+      }).catch(error => {
+        console.error('Direct GAS submit error:', error);
+        submitViaIframe(fields);
+      });
+    }
+
+    // iframeによるフォールバック送信
+    function submitViaIframe(fields) {
+      const iframeName = 'submitFrame_' + Date.now();
+      const iframe = document.createElement('iframe');
+      iframe.name = iframeName;
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = GAS_URL + '?path=external-form';
+      form.target = iframeName;
+
+      for (const [key, value] of Object.entries(fields)) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = value;
+        form.appendChild(input);
+      }
+
+      document.body.appendChild(form);
+
+      const timeout = setTimeout(() => {
+        showSubmitResult(true, '送信処理中です。しばらくお待ちください。<br><small style="color: #888;">Processing. Please wait...</small>');
+        cleanup();
+      }, 10000);
+
+      iframe.onload = function() {
+        clearTimeout(timeout);
+        showSubmitResult(true, '口座情報の登録が完了しました。<br>このページを閉じてください。<br><small style="color: #888;">Registration complete. You may close this page.</small>');
+        cleanup();
+      };
+
+      function cleanup() {
+        setTimeout(() => {
+          if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
+          if (form.parentNode) form.parentNode.removeChild(form);
+        }, 1000);
+      }
+
+      form.submit();
+    }
+
+    function showSubmitResult(success, message) {
+      document.getElementById('loadingSection').classList.remove('show');
+
+      const resultHtml = `
+        <div class="container" style="text-align: center; padding: 48px 24px;">
+          <div style="width: 80px; height: 80px; border-radius: 50%; background: ${success ? '#27ae60' : '#e74c3c'}; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size: 40px; color: white;">
+            ${success ? '✓' : '✕'}
+          </div>
+          <h1 style="color: #333; margin-bottom: 16px; font-size: 24px;">${success ? '送信完了 / Submitted' : 'エラー / Error'}</h1>
+          <p style="color: #666; line-height: 1.6;">${message}</p>
+        </div>
+      `;
+
+      document.querySelector('.main').innerHTML = resultHtml;
+      document.querySelector('.steps').style.display = 'none';
     }
 
     // 電話番号フォーマット
