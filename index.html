@@ -1672,9 +1672,10 @@
       return re.test(email);
     }
 
-    // カナバリデーション
+    // カナバリデーション（法人名義対応：英数字・記号も許可）
     function validateKana(text) {
-      const re = /^[ァ-ヶー 　]+$/;
+      // 全角カタカナ、長音、スペース、英数字、法人格記号を許可
+      const re = /^[ァ-ヶー 　A-Za-z0-9A-Za-z0-9（）()「」\-\.\/]+$/;
       return re.test(text);
     }
 
